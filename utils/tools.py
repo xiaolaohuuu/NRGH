@@ -682,6 +682,62 @@ def plot_gmm(gmm, X, clean_index, noisy_index, save_path='', plot_pdf=True):
         plt.savefig(save_path)
     else:
         plt.show()
+def SaveH5File_CLIPVersion(save_prefix="MIRFlickr"):
+
+    Path = "./data/"
+
+    img_mat = sio.loadmat(Path +"Mirflickr_img_20015.mat")
+    imgs = img_mat['imgs']
+    img_names = img_mat['img_names'].squeeze()
+
+    txt_mat = sio.loadmat(Path + "Mirflickr_txt_20015.mat")
+    txts = txt_mat['texts']
+    txt_names = txt_mat['txt_names'].squeeze()
+
+    label_mat = sio.loadmat(Path + "Mirflickr_L_20015.mat")
+    labels = label_mat['labels']
+    save_path ="./data/"
+
+    N = imgs.shape[0]
+    train_size = 10000
+    query_size = 2000
+
+    print(f"Train: {train_size}, Query: {query_size}, Database: {N - query_size}")
+
+    img_query, img_train, img_db = imgs[:query_size], imgs[query_size:query_size+train_size], imgs[query_size:]
+    txt_query, txt_train, txt_db = txts[:query_size], txts[query_size:query_size+train_size], txts[query_size:]
+    lab_query, lab_train, lab_db = labels[:query_size], labels[query_size:query_size+train_size], labels[query_size:]
+
+    imgn_query = img_names[:query_size]
+    imgn_train = img_names[query_size:query_size+train_size]
+    imgn_db = img_names[query_size:]
+
+    txtn_query = txt_names[:query_size]
+    txtn_train = txt_names[query_size:query_size+train_size]
+    txtn_db = txt_names[query_size:]
+
+    # 组织结构保存
+    save_dict = {
+        "ImgTrain": img_train,
+        "TagTrain": txt_train,
+        "LabTrain": lab_train,
+        "ImgQuery": img_query,
+        "TagQuery": txt_query,
+        "LabQuery": lab_query,
+        "ImgDataBase": img_db,
+        "TagDataBase": txt_db,
+        "LabDataBase": lab_db,
+        "ImgNamesTrain": np.array(imgn_train, dtype=object),
+        "TxtNamesTrain": np.array(txtn_train, dtype=object),
+        "ImgNamesQuery": np.array(imgn_query, dtype=object),
+        "TxtNamesQuery": np.array(txtn_query, dtype=object),
+        "ImgNamesDataBase": np.array(imgn_db, dtype=object),
+        "TxtNamesDataBase": np.array(txtn_db, dtype=object),
+    }
+
+    out_path = os.path.join(save_path, f"{save_prefix}.mat")
+    sio.savemat(out_path, save_dict)
+    print(f"✅ 保存成功: {out_path}")
 
 
 if __name__ == "__main__":
@@ -689,4 +745,4 @@ if __name__ == "__main__":
     # SaveH5File_F(256)
     # SaveH5File_C(256)
     # SaveH5File_N(256)
-    # SaveH5File_F_clip(256)
+    SaveH5File_CLIPVersion(256)
