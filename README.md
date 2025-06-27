@@ -7,6 +7,10 @@ python ./utils/tools.py
 python ./noise/generate_noisy_corr.py
 python ./noise/generate_noisy_label.py
 ```
+We perform BLIP-based text generation offline by running the following script:
+```bash
+python ./utils/gene_txt.py
+```
 Once these are generated, you can run the main script `NRGH.py` to play with the model:
 ```bash
 python NRCH.py
