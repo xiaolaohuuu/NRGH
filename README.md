@@ -11,3 +11,5 @@ Once these are generated, you can run the main script `NRGH.py` to play with the
 ```bash
 python NRCH.py
 ```
+The preprocessed version of the Flickr-25K dataset used in our experiments is publicly available at:
+[Baidu Netdisk Download Link](https://pan.baidu.com/s/1aCFYI71qX7BbR9GCVjSp2Q) (Extraction Code: `a7sm`)
